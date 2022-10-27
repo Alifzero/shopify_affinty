@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ks_export_shopify_discounts" model="ir.actions.server">
+        <field name="name">Export Discounts in Shopify</field>
+        <field name="model_id" ref="model_ks_shopify_discounts"/>
+        <field name="binding_model_id" ref="model_ks_shopify_discounts"/>
+        <field name="state">code</field>
+        <field name="code">
+            records.ks_export_to_shopify()
+        </field>
+    </record>
+
+    <record id="ks_shopify_discount_form_view" model="ir.ui.view">
+        <field name="name">ks.shopify.discount.form.view</field>
+        <field name="model">ks.shopify.discounts</field>
+        <field name="arch" type="xml">
+            <form string="Shopify Discounts">
+                <header>
+                    <button name="ks_generate_code" type="object" string="Generate Discount Code" class="oe_highlight"
+                    attrs="{'invisible':[('ks_title', '!=', False)]}"/>
+                    <button name="ks_manage_shopify_discounts_export" type="object" string="Export to Shopify" class="btn btn-info" attrs="{'invisible':[('ks_title', '=', False)]}"/>
+                </header>
+                <sheet>
+                    <group string="Basic Information">
+                        <group>
+                            <field name="ks_title" placeholder="Discount Code" nolabel="1"
+                                   style="font-size:30px;width: 500px;"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="ks_value"/>
+                            <field name="ks_shopify_discount_id"/>
+                            <field name="ks_shopify_price_rule_id"/>
+                            <field name="ks_allocation_method"/>
+                            <field name="ks_date_starts"/>
+                            <field name="ks_date_ends"/>
+                        </group>
+                        <group string="Instance Details">
+                            <field name="ks_shopify_instance" required="True"/>
+                            <field name="ks_company_id"/>
+                            <field name="ks_date_created"/>
+                            <field name="ks_date_updated"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Price Rules">
+                            <group>
+                                <group>
+                                    <field name="ks_entitled_collection_ids" widget="many2many_tags"/>
+                                    <field name="ks_once_per_customer" widget="boolean_toggle"/>
+                                    <field name="ks_entitled_customer_ids" widget="many2many_tags"
+                                           attrs="{'invisible':[('ks_customer_selection', '=', 'all')]}"  options = "{'no_create_edit': True, 'no_create': True}"/>
+                                </group>
+                                <group>
+                                    <field name="ks_prereq_quantity"
+                                           attrs="{'invisible':[('ks_prereq_subtotal', '!=', 0)]}"/>
+                                    <field name="ks_prereq_ship_price"
+                                           attrs="{'invisible':[('ks_target_type', '!=', 'shipping_line')]}"/>
+                                    <field name="ks_prereq_subtotal"
+                                           attrs="{'invisible':[('ks_prereq_quantity', '!=', 0)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Target Settings">
+                            <group>
+                                <group>
+                                    <field name="ks_target_selection"/>
+                                    <field name="ks_target_type"/>
+                                    <field name="ks_usage_limit"/>
+                                </group>
+                                <group>
+                                    <field name="ks_value_type"/>
+                                    <field name="ks_customer_selection"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="ks_shopify_tree_view" model="ir.ui.view">
+        <field name="name">ks.shopify.tree.view</field>
+        <field name="model">ks.shopify.discounts</field>
+        <field name="arch" type="xml">
+            <tree string="Discounts">
+                <field name="ks_shopify_discount_id"/>
+                <field name="ks_title" password="True"/>
+                <field name="ks_value"/>
+                <field name="ks_shopify_instance"/>
+                <field name="ks_date_starts"/>
+                <field name="ks_date_ends"/>
+            </tree>
+        </field>
+    </record>
+    <record id="ks_shopify_search_view" model="ir.ui.view">
+        <field name="name">ks.shopify.search.view</field>
+        <field name="model">ks.shopify.discounts</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="ks_title"/>
+                <field name="ks_shopify_discount_id" string="Shopify Id"
+                       filter_domain="[('ks_shopify_discount_id','ilike',self)]"/>
+                <field name="ks_shopify_instance" string="Shopify Instance"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Shopify Instance Id" name="ks_shopify_instance"
+                            context="{'group_by':'ks_shopify_instance'}"/>
+                    <filter string="Shopify Once Use" name="ks_once_per_customer"
+                            context="{'group_by':'ks_once_per_customer'}"/>
+                    <filter string="Shopify Company Id" name="ks_shopify_company"
+                            context="{'group_by':'ks_company_id'}"/>
+                    <filter string="Today Created Discounts" name="ks_date_created"
+                            domain="[('ks_date_created', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),
+                                 ('ks_date_created', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+                    <filter string="Today Updated Discounts" name="ks_date_updated"
+                            domain="[('ks_date_updated', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),
+                                 ('ks_date_updated', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="ks_shopify_discounts_action" model="ir.actions.act_window">
+        <field name="name">Discounts</field>
+        <field name="res_model">ks.shopify.discounts</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                **All the Shopify discounts will appear here.
+            </p>
+        </field>
+    </record>
+</odoo>

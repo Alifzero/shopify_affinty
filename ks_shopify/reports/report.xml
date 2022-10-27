@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ks_shopify_ks_report_id" model="ir.actions.report">
+            <field name="name">Shopify Report</field>
+            <field name="model">ks.shopify.email.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ks_shopify.ks_shopify_report_sale</field>
+            <field name="report_file">ks_shopify.ks_shopify_report</field>
+            <field name="binding_model_id" ref="model_ks_shopify_email_report"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    <record id="ks_shopify_inst_sales_report_id" model="ir.actions.report">
+            <field name="name">Shopify Sales Report</field>
+            <field name="model">ks.sale.print.report.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ks_shopify.ks_inst_report_sale</field>
+    </record>
+</odoo>

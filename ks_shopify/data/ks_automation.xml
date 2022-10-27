@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ks_shopify_email_report_cron" model="ir.cron">
+        <field name="name">KS: Shopify Sales Report</field>
+        <field name="model_id" ref="model_ks_shopify_email_report"/>
+        <field name="state">code</field>
+        <field name="code">model.action_send_email()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="True"/>
+        <field name="doall" eval="False"/>
+    </record>
+
+    <record id="ks_ir_cron_job_process" model="ir.cron">
+        <field name="name">Shopify Queue Job Process</field>
+        <field name="model_id" ref="model_ks_shopify_queue_jobs"/>
+        <field name="state">code</field>
+        <field name="code">model.ks_process_queue_jobs()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">months</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="ks_map_customers_action_server" model="ir.actions.server">
+        <field name="name">Map Shopify Existing Records</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="groups_id" eval="[(4, ref('ks_shopify.ks_shopify_group'))]"/>
+        <field name="code">
+            action=model.open_shopify_mapper()
+        </field>
+    </record>
+    <record id="ks_action_push_partner" model="ir.actions.server">
+        <field name="name">Push partner to shopify</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="groups_id" eval="[(4, ref('ks_shopify.ks_shopify_group'))]"/>
+        <field name="code">
+            action=model.ks_push_to_shopify()
+        </field>
+    </record>
+
+    <record id="ks_action_pull_partner" model="ir.actions.server">
+        <field name="name">Pull partner from shopify</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="groups_id" eval="[(4, ref('ks_shopify.ks_shopify_group'))]"/>
+        <field name="code">
+            action=model.ks_pull_from_shopify()
+        </field>
+    </record>
+
+    <!-- Form view for  Customers-->
+    <record id="ks_shopify_res_partner_view_form" model="ir.ui.view">
+        <field name="name">ks.shopify.res.partner.view.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_shopify_layer_customers" title="Shopify Customers" type="object" groups="ks_shopify.ks_shopify_group"
+                        class="oe_stat_button" icon="fa-server icon">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Shopify</span>
+                        <span class="o_stat_text">Customers</span>
+                    </div>
+                </button>
+
+            </xpath>
+            <xpath expr="/form/*" position="before">
+                <header>
+                    <button name="ks_push_to_shopify" type="object" class="oe_highlight"
+                            string="Push to Shopify" context="{'push_to_shopify':True}"
+                            attrs="{'invisible': ['|', ('type', '!=','contact'), ('company_type', '!=','person')]}" groups="ks_shopify.ks_shopify_group"/>
+                    <button name="ks_pull_from_shopify" type="object" class="oe_highlight"
+                            string="Pull from Shopify" context="{'pull_from_shopify':True}"
+                            attrs="{'invisible': ['|', ('type', '!=','contact'), ('company_type', '!=','person')]}" groups="ks_shopify.ks_shopify_group"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']" position="before">
+                <div class="alert alert-danger" role="alert" groups="ks_shopify.ks_shopify_group">
+                    <p>
+                        <b>Shopify Connector Warning</b> :- Email inside these addresses would be overwritten by the original
+                        email of Shopify customer, <br></br> whenever this customer is pulled from shopify.
+                    </p>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!--Window Action for Shopify Customers-->
+    <record model="ir.actions.act_window" id="action_shopify_res_partner">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                **All the prepared Customers will appear here.
+            </p>
+        </field>
+    </record>
+
+</odoo>

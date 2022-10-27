@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ks_shopify_locations_view_form" model="ir.ui.view">
+        <field name="name">ks.shopify.locations.view.form</field>
+        <field name="model">ks.shopify.locations</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <sheet>
+                    <group>
+                        <div class="oe_title" id="title">
+                            <label for="ks_name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="ks_name" placeholder="Name" style="width: 150%;"/>
+                            </h1>
+                        </div>
+                    </group>
+                    <group>
+                        <group string="Essential Details">
+                            <field name="ks_shopify_location_id"/>
+                            <field name="ks_shopify_instance"/>
+                            <field name="ks_active"/>
+                            <field name="ks_created_at"/>
+                            <field name="ks_updated_at"/>
+                        </group>
+                        <group string="Contact Details">
+                            <field name="ks_address1"/>
+                            <field name="ks_address2"/>
+                            <field name="ks_city"/>
+                            <field name="ks_zip"/>
+                            <field name="ks_province"/>
+                            <field name="ks_country"/>
+                            <field name="ks_phone"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ks_shopify_locations_view_tree" model="ir.ui.view">
+        <field name="name">ks.shopify.locations.view.tree</field>
+        <field name="model">ks.shopify.locations</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false">
+                <field name="ks_shopify_location_id"/>
+                <field name="ks_name"/>
+                <field name="ks_shopify_instance"/>
+                <field name="ks_active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_ks_shopify_locations">
+        <field name="name">Shopify Locations</field>
+        <field name="res_model">ks.shopify.locations</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                **All the Synced Shopify Locations will appear here.
+            </p>
+        </field>
+    </record>
+</odoo>

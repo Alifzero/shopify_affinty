@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ks_payment_gateway_form_view" model="ir.ui.view">
+        <field name="name">ks.shopify.payment.gateway.form</field>
+        <field name="model">ks.shopify.payment.gateway</field>
+        <field name="arch" type="xml">
+            <form string="Payment Gateway form" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="ks_name"/>
+                            <field name="ks_code"/>
+                        </group>
+                        <group>
+                            <field name="ks_shopify_instance"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ks_payment_gateway_tree_view" model="ir.ui.view">
+        <field name="name">ks.shopify.payment.gateway.tree</field>
+        <field name="model">ks.shopify.payment.gateway</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Gateway" create="false" edit="false">
+                <field name="ks_name"/>
+                <field name="ks_code"/>
+                <field name="ks_shopify_instance"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="ks_shopify_payment_view_search" model="ir.ui.view">
+        <field name="name">Payment Gateway Search</field>
+        <field name="model">ks.shopify.payment.gateway</field>
+        <field name="arch" type="xml">
+            <search string="Payment Gateway Search">
+                <field string="Code" name="ks_code"/>
+                <field name="ks_name"/>
+                <field name="ks_shopify_instance" string="Shopify Instance"
+                       filter_domain="[('ks_shopify_instance','ilike',self)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="ks_shopify_payment_view_action" model="ir.actions.act_window">
+        <field name="name">Payment Gateway</field>
+        <field name="res_model">ks.shopify.payment.gateway</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Shopify Payment gateway visible here.
+            </p>
+        </field>
+    </record>
+</odoo>

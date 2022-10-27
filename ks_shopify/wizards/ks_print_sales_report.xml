@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_sales_report_generate_form" model="ir.ui.view">
+        <field name="name">ks.sale.print.report.wizard.form</field>
+        <field name="model">ks.sale.print.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Instance Sales Report">
+                <group>
+                    <field name="ks_shopify_instance" options="{'no_create': True, 'no_create_edit':True}"/>
+                </group>
+                <footer>
+                    <button name="action_sales_report_generate" string="Create Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sales_report_generate" model="ir.actions.act_window">
+        <field name="name">Instance Sales Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ks.sale.print.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sales_report_generate_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

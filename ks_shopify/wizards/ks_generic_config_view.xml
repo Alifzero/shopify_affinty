@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ks_shopify_generic_configuration_form_view" model="ir.ui.view">
+        <field name="name">ks.generic.configuration.form</field>
+        <field name="model">ks.generic.configuration</field>
+        <field name="arch" type="xml">
+            <form string="Update Configuration">
+                <group>
+                    <group>
+                        <field name="ks_shopify_instance" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                         <field name="ks_shopify_product_template" invisible="1"/>
+                        <field name="ks_push_additional_data" attrs="{'invisible': [('ks_multi_record', '=', True)]}"/>
+                        <field name="ks_multi_record" widget="boolean_toggle" invisible="1"/>
+                    </group>
+                </group>
+                <group>
+                    <group attrs="{'invisible': ['|', ('ks_push_additional_data', '!=', True), ('ks_multi_record', '=', True)]}">
+                        <field name="ks_note" attrs="{'invisible': [('ks_domain', '!=', 'res.partner')]}"/>
+                        <field name="ks_tags" attrs="{'invisible': [('ks_domain', '!=', 'res.partner')]}"/>
+                        <field name="ks_id" invisible="1"/>
+                        <field name="ks_domain" invisible="1"/>
+                        <field name="ks_shopify_tags" invisible="1"/>
+                        <field name="ks_shopify_type_product" invisible="1"/>
+                        <field name="ks_shopify_vendor" invisible="1"/>
+                        <field name="ks_update_price" invisible="1"/>
+                        <field name="ks_price" invisible="1"/>
+                        <field name="ks_compare_at_price" invisible="1"/>
+                        <field name="ks_update_image" invisible="1"/>
+                        <field name="ks_update_stock" invisible="1"/>
+                        <field name="ks_update_website_status" invisible="1"/>
+                        <field name="ks_barcode" invisible="1"/>
+                        <field name="ks_inventory_policy" invisible="1"/>
+                        <field name="ks_shopify_description" invisible="1"/>
+                        <!--                        <field name="ks_update_website_status"/>-->
+                    </group>
+                    <!--                    <group>-->
+                    <!--                        <field name="ks_update_price"/>-->
+                    <!--                        <field name="ks_update_image"/>-->
+                    <!--                        <field name="ks_update_stock"/>-->
+                    <!--                    </group>-->
+                </group>
+                <span attrs="{'invisible': ['|', ('ks_push_additional_data', '!=', True), ('ks_multi_record', '=', True)]}">
+<!--                    <group>-->
+<!--                        <field name="ks_shopify_tags" attrs="{'invisible': [('ks_domain', 'not in', ['product.template', 'ks.shopify.product.template'])]}"/>-->
+<!--                        <field name="ks_shopify_type_product" attrs="{'invisible': [('ks_domain', 'not in', ['product.template', 'ks.shopify.product.template'])]}"/>-->
+<!--                        <field name="ks_shopify_vendor" attrs="{'invisible': [('ks_domain', 'not in', ['product.template', 'ks.shopify.product.template'])]}"/>-->
+<!--                    </group>-->
+<!--                    <group>-->
+                        <field name="ks_product_additional_data" string="Product Additional Data" nolabel="1" force_save="1" attrs="{'invisible':[('ks_id', '=', False)]}">
+                            <tree delete="0" create="0">
+                                <field name="ks_shopify_instance" force_save="1"/>
+                                <field name="ks_product_variant_id" force_save="1"/>
+                                <field name="ks_shopify_tags" force_save="1"/>
+                                <field name="ks_shopify_type_product" force_save="1"/>
+                                <field name="ks_shopify_vendor" force_save="1"/>
+                                <field name="ks_update_price" invisible="1" force_save="1"/>
+                                <field name="ks_price" invisible="1" force_save="1"/>
+                                <field name="ks_compare_at_price" invisible="1" force_save="1"/>
+                                <field name="ks_update_image" invisible="1" force_save="1"/>
+                                <field name="ks_update_stock" invisible="1" force_save="1"/>
+                                <field name="ks_update_website_status" invisible="1" force_save="1"/>
+                                <field name="ks_barcode" invisible="1" force_save="1"/>
+                                <field name="ks_inventory_policy" invisible="1" force_save="1"/>
+                                <field name="ks_shopify_description" force_save="1"/>
+                            </tree>
+                        </field>
+<!--                        <field name="ks_product_product" invisible="1"/>-->
+<!--                        <field name="ks_update_price" attrs="{'invisible': ['|', ('ks_domain', 'not in', ['product.template', 'ks.shopify.product.template']), ('ks_product_product', '=', True)]}"/>-->
+<!--                        <field name="ks_price" attrs="{'invisible': [('ks_update_price', '=', False)]}"/>-->
+<!--                        <field name="ks_compare_at_price" attrs="{'invisible': [('ks_update_price', '=', False)]}"/>-->
+<!--                        <field name="ks_update_image" attrs="{'invisible': [('ks_domain', 'not in', ['product.template', 'ks.shopify.product.template'])]}"/>-->
+<!--                        <field name="ks_update_stock" attrs="{'invisible': [('ks_domain', 'not in', ['product.template', 'ks.shopify.product.template'])]}"/>-->
+<!--                        <field name="ks_update_website_status" attrs="{'invisible': [('ks_domain', 'not in', ['product.template', 'ks.shopify.product.template'])]}"/>-->
+<!--                        <field name="ks_barcode" attrs="{'invisible': ['|', ('ks_domain', 'not in', ['product.template', 'ks.shopify.product.template']), ('ks_product_product', '=', True)]}"/>-->
+<!--                    </group>-->
+                    <!--                        <field name="ks_update_price"/>-->
+                    <!--                        <field name="ks_update_image"/>-->
+                    <!--                        <field name="ks_update_stock"/>-->
+                    <!--                    </group>-->
+                </span>
+<!--                <group attrs="{'invisible': ['|', ('ks_push_additional_data', '!=', True), ('ks_multi_record', '=', True)]}">-->
+<!--                    <field name="ks_shopify_description" attrs="{'invisible': [('ks_domain', 'not in', ['product.template', 'ks.shopify.product.template'])]}"/>-->
+<!--                </group>-->
+                <footer>
+                    <button string="Execute" name="ks_update_generic" type="object" class="btn-primary"
+                            context="{'server_action': True}"/>
+                    <button string="Close" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_shopify_generic_wizard">
+        <field name="name">Data Wizard</field>
+        <field name="res_model">ks.generic.configuration</field>
+        <field name="view_mode">form</field>
+    </record>
+</odoo>
+

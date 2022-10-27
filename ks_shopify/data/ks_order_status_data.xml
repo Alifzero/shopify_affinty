@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="0">
+        <record id="ks_shopify_order_status_1" model="ks.order.status">
+            <field name="status">open</field>
+            <field name="name">Open</field>
+        </record>
+         <record id="ks_shopify_order_status_2" model="ks.order.status">
+            <field name="status">paid</field>
+            <field name="name">Paid</field>
+        </record>
+         <record id="ks_shopify_order_status_3" model="ks.order.status">
+            <field name="status">completed</field>
+            <field name="name">Completed</field>
+        </record>
+<!--         <record id="ks_shopify_order_status_4" model="ks.shopify.order.status">-->
+<!--            <field name="status">refunded</field>-->
+<!--            <field name="name">Refunded</field>-->
+<!--        </record>-->
+         <record id="ks_shopify_order_status_5" model="ks.order.status">
+            <field name="status">pending</field>
+            <field name="name">Pending</field>
+        </record>
+    </data>
+</odoo>

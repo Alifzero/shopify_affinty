@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ks_shopify_additional_data_form_view" model="ir.ui.view">
+        <field name="name">ks.additional.data.form</field>
+        <field name="model">ks.additional.data</field>
+        <field name="arch" type="xml">
+            <form string="Update Data">
+                <group string="Instance">
+                    <field name="ks_shopify_instance"/>
+                </group>
+                <group string="Data">
+                    <group>
+                        <field name="ks_product_variant_id" invisible="1"/>
+                        <field name="ks_shopify_tags" attrs="{'invisible': [('ks_product_variant_id', '!=', False)]}"/>
+                        <field name="ks_shopify_type_product" attrs="{'invisible': [('ks_product_variant_id', '!=', False)]}"/>
+                        <field name="ks_shopify_vendor" attrs="{'invisible': [('ks_product_variant_id', '!=', False)]}"/>
+                        <field name="ks_update_price"/>
+                        <field name="ks_price" attrs="{'invisible': [('ks_update_price', '=', False)]}"/>
+                        <field name="ks_compare_at_price" attrs="{'invisible': [('ks_update_price', '=', False)]}"/>
+                        <field name="ks_barcode" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="ks_update_website_status" attrs="{'invisible': [('ks_product_variant_id', '!=', False)]}"/>
+                        <field name="ks_inventory_policy" attrs="{'invisible': [('ks_product_variant_id', '!=', False)]}"/>
+                        <field name="ks_update_image" attrs="{'invisible': [('ks_product_variant_id', '!=', False)]}"/>
+                        <field name="ks_update_stock" invisible="1"/>
+                        <field name="ks_data" invisible="1"/>
+                    </group>
+                    <field name="ks_shopify_description" attrs="{'invisible': [('ks_product_variant_id', '!=', False)]}"/>
+                </group>
+                <footer>
+                    <button string="Execute" name="ks_save_additional_data" type="object" class="btn-primary oe_highlight"/>
+                    <button string="Close" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_shopify_additional_data_wizard">
+        <field name="name">Data Wizard</field>
+        <field name="res_model">ks.additional.data</field>
+        <field name="view_mode">form</field>
+    </record>
+</odoo>
+

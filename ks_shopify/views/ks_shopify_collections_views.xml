@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ks_import_collections" model="ir.actions.server">
+        <field name="name">Sync Custom Collections from Shopify</field>
+        <field name="model_id" ref="model_ks_shopify_custom_collections"/>
+        <field name="binding_model_id" ref="model_ks_shopify_custom_collections"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.ks_shopify_import_collections()
+        </field>
+    </record>
+    <record id="ks_export_collections" model="ir.actions.server">
+        <field name="name">Sync Custom Collections to Shopify</field>
+        <field name="model_id" ref="model_ks_shopify_custom_collections"/>
+        <field name="binding_model_id" ref="model_ks_shopify_custom_collections"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.ks_shopify_export_collections()
+        </field>
+    </record>
+    <record id="ks_shopify_collection_form_view" model="ir.ui.view">
+        <field name="name">ks.shopify.collection.form.view</field>
+        <field name="model">ks.shopify.custom.collections</field>
+        <field name="arch" type="xml">
+            <form string="Collections form">
+                <sheet>
+                    <group>
+                        <group string="Connector Basic Information">
+                            <field name="ks_shopify_collection_id"/>
+                            <field name="ks_name"/>
+                            <field name="ks_handle"/>
+                        </group>
+                        <group string="Instance Information">
+                            <field name="ks_shopify_instance" required="1"/>
+                            <field name="ks_company_id"/>
+                            <field name="ks_product_ids" widget="many2many_tags" domain="[('ks_shopify_instance','=',ks_shopify_instance)]"/>
+                        </group>
+                        <group string="Date Logs">
+                            <field name="ks_date_created"/>
+                            <field name="ks_date_updated"/>
+                        </group>
+                    </group>
+                    <group string="Conditions" invisible="True">
+                            <field name="ks_collection_condition">
+                                <tree editable="bottom">
+                                    <field name="ks_type"/>
+                                    <field name="ks_relation"/>
+                                    <field name="ks_condition"/>
+                                </tree>
+                            </field>
+                        </group>
+                    <notebook>
+                        <page string="Body">
+                            <field name="ks_body"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="ks_shopify_collection_tree_view" model="ir.ui.view">
+        <field name="name">ks.shopify.collection.tree.view</field>
+        <field name="model">ks.shopify.custom.collections</field>
+        <field name="arch" type="xml">
+            <tree string="Collection List">
+                <field name="ks_shopify_collection_id"/>
+                <field name="ks_name"/>
+                <field name="ks_handle"/>
+                <field name="ks_shopify_instance"/>
+                <field name="ks_company_id"/>
+                <field name="ks_date_created"/>
+                <field name="ks_date_updated"/>
+            </tree>
+        </field>
+    </record>
+    <record id="ks_shopify_collection_search_view" model="ir.ui.view">
+        <field name="name">ks.shopify.collection.search.view</field>
+        <field name="model">ks.shopify.custom.collections</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="ks_name"/>
+                <field name="ks_shopify_collection_id" string="Shopify Id"
+                       filter_domain="[('ks_shopify_collection_id','ilike',self)]"/>
+                <field name="ks_shopify_instance" string="Shopify Instance"/>
+                <field name="ks_handle"/>
+                <field name="ks_company_id"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Shopify Instance Id" name="ks_shopify_instance" context="{'group_by':'ks_shopify_instance'}"/>
+                    <filter string="Shopify Company Id" name="ks_shopify_company" context="{'group_by':'ks_company_id'}"/>
+                    <filter string="Today Created Collections" name="ks_date_created"
+                            domain="[('ks_date_created', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),
+                                 ('ks_date_created', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+                    <filter string="Today Updated Collections" name="ks_date_updated"
+                            domain="[('ks_date_updated', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),
+                                 ('ks_date_updated', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="ks_shopify_collection_actions" model="ir.actions.act_window">
+        <field name="name">Custom Collections</field>
+        <field name="res_model">ks.shopify.custom.collections</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                **All the  Shopify Collections will appear here.
+            </p>
+        </field>
+    </record>
+</odoo>

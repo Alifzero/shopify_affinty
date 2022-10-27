@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!--Server Action for Exporting Sale Order from Odoo to Shopify-->
+    <record id="ks_export_shopify_order" model="ir.actions.server">
+        <field name="name">Export Order in Shopify</field>
+        <field name="model_id" ref="model_sale_order"/>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="groups_id" eval="[(4, ref('ks_shopify.ks_shopify_group'))]"/>
+        <field name="state">code</field>
+        <field name="code">
+            records.ks_export_order_to_shopify()
+        </field>
+    </record>
+
+    Inherited Form view for Shopify Orders
+    <record id="ks_shopify_sale_order_form_view" model="ir.ui.view">
+        <field name="name">ks.shopify.sale.order.inherit.form.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" class="oe_button_box">
+                <field name="ks_sync_states" invisible="1"/>
+                <button name="" class="oe_stat_button" disabled="True" groups="ks_shopify.ks_shopify_group"
+                        attrs="{'invisible': [('ks_sync_states', '=', False)]}" icon="fa-check text-success">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Synchronised</span>
+                        <span class="o_stat_text">With Shopify</span>
+                    </div>
+                </button>
+                <button name="" class="oe_stat_button" disabled="True" groups="ks_shopify.ks_shopify_group"
+                        attrs="{'invisible': [('ks_sync_states', '=', True )]}" icon="fa-times-circle text-danger">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">UnSynchronised</span>
+                        <span class="o_stat_text">With Shopify</span>
+                    </div>
+                </button>
+            </div>
+            <xpath expr="//header" position="inside">
+                <button class="btn btn-primary" name="ks_cancel_sale_order_in_shopify" type="object" groups="ks_shopify.ks_shopify_group"
+                        string="Cancel in Shopify"
+                        attrs="{'invisible':['|','|', ('state','not in','cancel'),('ks_shopify_status', '=', 'cancelled'),('ks_shopify_order_id', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//page[@name='other_information']" position="after">
+                <page name="shopify_info" string="Shopify Info" groups="ks_shopify.ks_shopify_group">
+                    <div class="alert alert-info" role="alert" style="margin-bottom:0px;">
+                                <h3>Fields and their uses :-</h3>
+                                <ul>
+                                    <li>
+                                        <b>Instance</b>
+                                        : Displays Shopify Instance Name
+                                    </li>
+                                    <li>
+                                        <b>Shopify Id</b>
+                                        : Displays Shopify ID
+                                    </li>
+                                    <li>
+                                        <b>Created On</b>
+                                        : Displays date of creation
+                                    </li>
+                                    <li>
+                                        <b>Updated On</b>
+                                        : Displays date of updation
+                                    </li>
+                                    <li>
+                                        <b>Shopify Status</b>
+                                        : Displays Shopify Order Status
+                                    </li>
+                                    <li>
+                                        <b>Shopify Payment Gateway</b>
+                                        : Displays Shopify Order Payment Gateway
+                                    </li>
+                                    <li>
+                                        <b>Transaction Id</b>
+                                        : Displays Shopify Order Transaction ID
+                                    </li>
+                                    <li>
+                                        <b>Customer IP</b>
+                                        : Displays Shopify Customer IP
+                                    </li>
+                                    <li>
+                                        <b>Shopify Coupons</b>
+                                        : Displays Shopify Order Coupons
+                                    </li>
+                                </ul>
+                            </div>
+                    <group name="shopify_order_details">
+                        <group>
+                            <field name="ks_shopify_instance"
+                                   options="{'no_create':True,'no_create_edit': True}"/>
+                            <field name="ks_shopify_order_id" attrs="{'invisible': [('ks_shopify_order_id', '=', 0)]}"/>
+                            <field name="ks_shopify_draft_order_id"/>
+                            <field name="ks_is_draft"/>
+                            <field name="ks_date_created"/>
+                            <field name="ks_date_updated"/>
+                        </group>
+                        <group>
+                            <field name="ks_shopify_status" attrs="{'required': [('ks_shopify_instance', '!=', False)]}"/>
+                            <field name="ks_shopify_payment_gateway" readonly="1"/>
+                            <field name="ks_shopify_transaction_id" readonly="1"/>
+                            <field name="ks_shopify_checkout_id" readonly="1"/>
+                            <field name="ks_customer_ip_address" readonly="1"/>
+                        </group>
+                    </group>
+                    <group name="shopify_coupons">
+                        <field name="ks_shopify_coupons"
+                               string="Shopify Coupons"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='discount']" position="after">
+                <field name="ks_discount_amount"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Tree view for Shopify Orders-->
+    <record id="ks_tree_shopify_orders" model="ir.ui.view">
+        <field name="name">ks.shopify.sale.orders.tree.view</field>
+        <field name="model">sale.order</field>
+        <field name="mode">primary</field>
+        <field eval="28" name="priority"/>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="ks_shopify_instance"/>
+                <field name="ks_shopify_order_id"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_status']" position="before">
+                <field name="ks_shopify_status"/>
+                <field name="ks_sync_states"/>
+            </xpath>
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-warning">ks_shopify_status == 'on-hold'</attribute>
+                <attribute name="decoration-danger">ks_sync_states == False</attribute>
+                <attribute name="decoration-muted">ks_shopify_status in ['cancelled', 'pending']</attribute>
+                <attribute name="decoration-success">ks_shopify_status == 'processing' or ks_sync_states == True</attribute>
+                <attribute name="decoration-info">ks_shopify_status == 'completed'</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Search view for shopify Orders-->
+    <record id="ks_sale_order_search_view" model="ir.ui.view">
+        <field name="name">ks.sale.order.search.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_sale_orders_filter']" position="before">
+                <field name="ks_shopify_order_id" string="Shopify Id" filter_domain="[('ks_shopify_order_id','ilike',self)]"/>
+                <field name="ks_shopify_instance" string="Shopify Instance Id"
+                       filter_domain="[('ks_shopify_instance','ilike',self)]"/>
+                <separator/>
+                <filter string="Today Created Shopify Orders" name="shopify_created_today"
+                        domain="[('ks_date_created','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('ks_date_created','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>
+                <filter string="Today Updated Shopify Orders" name="shopify_created_today"
+                        domain="[('ks_date_updated','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('ks_date_updated','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Shopify Instance Id" name="ks_shopify_instance"
+                            context="{'group_by':'ks_shopify_instance'}"/>
+                    <filter string="Shopify Status" name="ks_shopify_status" context="{'group_by':'ks_shopify_status'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Window Action for Shopify Orders-->
+    <record model="ir.actions.act_window" id="action_shopify_sale_order">
+        <field name="name">Shopify Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="ks_shopify.ks_tree_shopify_orders"/>
+        <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')), ('ks_shopify_instance','!=',False)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                **All the Shopify Orders will appear here.
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_shopify_sale_order_quote">
+        <field name="name">Shopify Quotation</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="ks_shopify.ks_tree_shopify_orders"/>
+        <field name="domain">[('state','in',('draft','sent','cancel')), ('ks_shopify_instance','!=',False)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                **All the Shopify Orders will appear here.
+            </p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_shopify_inventory_adjustments">
+        <field name="name">Shopify Inventory Adjustments</field>
+        <field name="res_model">stock.inventory</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="stock.view_inventory_tree"/>
+        <field name="domain">[('for_shopify','=',True)]</field>
+        <field name="context">{'create':False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                **All the Shopify Inventory Adjustments will appear here.
+            </p>
+        </field>
+    </record>
+
+</odoo>

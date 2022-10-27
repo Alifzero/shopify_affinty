@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!--    Shopify Instance-->
+    <record model="ir.rule" id="ks_shopify_instance_security_rule">
+        <field name="name">ks.shopify.instances multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_connector_instance" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+    <!--    Shopify Products-->
+    <record model="ir.rule" id="ks_shopify_product_template_security_rule">
+        <field name="name">ks.shopify.product.template multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_product_template" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+      <!--    Shopify Partners-->
+    <record model="ir.rule" id="ks_shopify_partner_security_rule">
+        <field name="name">ks.shopify.partner multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_partner" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+    <!--    Shopify Discounts-->
+    <record model="ir.rule" id="ks_shopify_discounts_security_rule">
+        <field name="name">ks.shopify.discounts multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_discounts" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+    <!--    Shopify Product Attribute-->
+    <record model="ir.rule" id="ks_shopify_attribute_security_rule">
+        <field name="name">ks.shopify.product.attribute multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_product_attribute" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+    <!--    Shopify Product Variant-->
+    <record model="ir.rule" id="ks_shopify_variant_security_rule">
+        <field name="name">ks.shopify.product.variant multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_product_variant" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+    <!--    Shopify custom collections-->
+    <record model="ir.rule" id="ks_shopify_custom_collections_security_rule">
+        <field name="name">ks.shopify.custom.collections multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_custom_collections" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+    <!--    Shopify product auto syncing-->
+    <record model="ir.rule" id="ks_shopify_auto_product_syncing_configuration_security_rule">
+        <field name="name">ks.shopify.auto.product.syncing.configuration multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_auto_product_syncing_configuration" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+    <!--    Shopify Product Attribute Value-->
+    <record model="ir.rule" id="ks_shopify_pro_attr_value_security_rule">
+        <field name="name">ks.shopify.pro.attr.value multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_pro_attr_value" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+<!--     &lt;!&ndash;    Shopify queue jobs&ndash;&gt;-->
+<!--    <record model="ir.rule" id="ks_shopify_queue_jobs_security_rule">-->
+<!--        <field name="name">ks.shopify.queue.jobs multi-company</field>-->
+<!--        <field name="model_id" ref="model_ks_shopify_queue_jobs" />-->
+<!--        <field name="global" eval="True"/>-->
+<!--        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>-->
+<!--    </record>-->
+
+    <!--    Shopify logger-->
+    <record model="ir.rule" id="ks_shopify_logger_security_rule">
+        <field name="name">ks.shopify.logger multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_logger" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+    <!--    Shopify Payment Gateway-->
+    <record model="ir.rule" id="ks_shopify_payment_gateway_security_rule">
+        <field name="name">ks.shopify.payment.gateway multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_payment_gateway" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('ks_company_id','in',company_ids),('ks_company_id','=',False)]</field>
+    </record>
+
+    <!--    Shopify sale report-->
+    <record model="ir.rule" id="ks_shopify_sale_report_security_rule">
+        <field name="name">ks.shopify.sale.report multi-company</field>
+        <field name="model_id" ref="model_ks_shopify_sale_report" />
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('company_id','in',company_ids),('company_id','=',False)]</field>
+    </record>
+</odoo>

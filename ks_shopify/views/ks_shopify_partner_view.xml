@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--Server Action for Exporting or Updating Customers from Odoo to Shopify-->
+    <record id="s_action_ks_export_customer" model="ir.actions.server">
+        <field name="name">Sync Customer from Shopify</field>
+        <field name="model_id" ref="model_ks_shopify_partner"/>
+        <field name="binding_model_id" ref="model_ks_shopify_partner"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.ks_shopify_import_customers()
+        </field>
+    </record>
+    <record id="s_action_ks_update_customer" model="ir.actions.server">
+        <field name="name">Sync Customer to Shopify</field>
+        <field name="model_id" ref="model_ks_shopify_partner"/>
+        <field name="binding_model_id" ref="model_ks_shopify_partner"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.ks_shopify_export_customers()
+        </field>
+    </record>
+
+    <record id="ks_shopify_partner_view_form" model="ir.ui.view">
+        <field name="name">ks.shopify.partner.view.form</field>
+        <field name="model">ks.shopify.partner</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <!--                <header>-->
+                <!--                    <button name="update_record_data_in_odoo" string="Update Data" type="object"-->
+                <!--                            class="oe_highlight" attrs="{'invisible': [('ks_need_update', '=', False)]}"/>-->
+                <!--                </header>-->
+                <sheet>
+                    <div class="alert alert-info" role="alert" style="margin-bottom:0px;">
+                        <h3>Fields and their uses :-</h3>
+                        <ul>
+                            <li>
+                                <b>Company</b>
+                                : Displays Company Name
+                            </li>
+                            <li>
+                                <b>Odoo Partner</b>
+                                : Displays Odoo related record name
+                            </li>
+                            <li>
+                                <b>Shopify Customer ID</b>
+                                : Displays Shopify Customer ID
+                            </li>
+                            <li>
+                                <b>Instance</b>
+                                : Displays Shopify Instance Name
+                            </li>
+                            <li>
+                                <b>Date Created</b>
+                                : Displays date of creation
+                            </li>
+                            <li>
+                                <b>Date Updated</b>
+                                : Displays date of updation
+                            </li>
+                        </ul>
+                    </div>
+                    <group>
+                        <field name="ks_type"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="ks_company_id"/>
+                            <field name="ks_res_partner"/>
+                        </group>
+                        <group>
+                            <field name="ks_shopify_partner_id"/>
+                            <field name="ks_shopify_instance"/>
+                            <field name="ks_date_created"/>
+                            <field name="ks_date_updated"/>
+                        </group>
+                    </group>
+                    <group string="Essential Details">
+                        <group>
+                            <field name="ks_order_count"/>
+                            <field name="ks_shopify_order" readonly="1"/>
+                            <field name="ks_total_spent"/>
+                        </group>
+                        <group>
+                            <field name="ks_email_verified"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="ks_note" string="Note"/>
+                    </group>
+                    <group>
+                        <field name="ks_tags" string="Tags"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ks_shopify_partner_view_tree" model="ir.ui.view">
+        <field name="name">ks.shopify.partner.view.tree</field>
+        <field name="model">ks.shopify.partner</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" decoration-info="ks_mapped==True">
+                <field name="ks_shopify_partner_id"/>
+                <field name="ks_res_partner"/>
+                <field name="ks_shopify_instance"/>
+                <field name="ks_type"/>
+                <field name="ks_order_count"/>
+                <field name="ks_total_spent"/>
+                <field name="ks_email_verified"/>
+                <field name="ks_mapped" invisible="1"/>
+                <field name="ks_company_id"/>
+                <field name="ks_date_created"/>
+                <field name="ks_date_updated"/>
+                <!--                <field name="ks_sync_states" invisible="1"/>-->
+                <!--                <field name="ks_need_update" invisible="1"/>-->
+                <!--                <button name="update_record_data_in_odoo" string="Update Data" type="object"-->
+                <!--                        class="oe_highlight" attrs="{'invisible': [('ks_need_update', '=', False)]}"/>-->
+            </tree>
+        </field>
+    </record>
+
+
+    <!--Search View for Shopify Customer-->
+    <record id="ks_shopify_partner_view_search" model="ir.ui.view">
+        <field name="name">ks.shopify.partner.view.search</field>
+        <field name="model">ks.shopify.partner</field>
+        <field name="arch" type="xml">
+            <search>
+                <!--                <field name="ks_username" string="Shopify Username"-->
+                <!--                       filter_domain="[('ks_shopify_username','ilike',self)]"/>-->
+                <field name="ks_type"/>
+                <filter string="Type" name="type" domain="[('ks_type', '=', 'customer')]"/>
+                <field name="ks_shopify_partner_id" string="Shopify Id"
+                       filter_domain="[('ks_shopify_partner_id','ilike',self)]"/>
+                <field name="ks_shopify_instance" string="Shopify Instance"/>
+                <field name="ks_res_partner"/>
+                <field name="ks_company_id"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Shopify Instance Id" name="ks_shopify_instance" context="{'group_by':'ks_shopify_instance'}"/>
+                    <filter string="Odoo Model" name="main_model_group" context="{'group_by':'ks_res_partner'}"/>
+                    <filter string="Today Created Customers" name="ks_date_created"
+                            domain="[('ks_date_created', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),
+                                 ('ks_date_created', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+                    <filter string="Today Updated Customers" name="ks_date_updated"
+                            domain="[('ks_date_updated', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),
+                                 ('ks_date_updated', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+                    <!--                    <filter string="Update Action Needed" name="ks_need_update"-->
+                    <!--                            domain="[('ks_need_update', '=', True)]"/>-->
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_ks_shopify_partner">
+        <field name="name">Shopify Customers</field>
+        <field name="res_model">ks.shopify.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{"search_default_type":1}</field>
+        <!--        <field name="domain">[('ks_type', '=', 'customer')]</field>-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                **All the Synced Shopify Customers will appear here.
+            </p>
+        </field>
+    </record>
+</odoo>
